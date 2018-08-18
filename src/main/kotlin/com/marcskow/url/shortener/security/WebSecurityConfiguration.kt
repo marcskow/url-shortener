@@ -9,6 +9,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository
+import org.springframework.session.web.http.CookieHttpSessionStrategy
+import org.springframework.session.web.http.HttpSessionStrategy
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
@@ -38,6 +40,11 @@ class WebSecurityConfiguration : WebSecurityConfigurerAdapter() {
                 .anyRequest().authenticated()
                 .and().csrf()
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+    }
+
+    @Bean
+    fun httpSessionStrategy(): HttpSessionStrategy {
+        return CookieHttpSessionStrategy()
     }
 
     @Bean

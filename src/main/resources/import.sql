@@ -5,5 +5,4 @@ INSERT INTO users(username, password) VALUES('Rafix', 'password');
 INSERT INTO roles(role, user_id) VALUES('US_ROLE_USER', 1)
 INSERT INTO roles(role, user_id) VALUES('US_ROLE_ADMIN', 1)
 
-INSERT INTO roles(role, user_id) VALUES('US_ROLE_USER', 2
-)
+INSERT INTO roles(role, user_id) VALUES('US_ROLE_USER', 2)
