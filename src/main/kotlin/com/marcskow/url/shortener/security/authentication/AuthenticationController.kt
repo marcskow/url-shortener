@@ -4,7 +4,7 @@ import com.marcskow.url.shortener.security.JwtTokenProvider
 import com.marcskow.url.shortener.user.UsRole
 import com.marcskow.url.shortener.user.UsUser
 import com.marcskow.url.shortener.user.UserRepository
-import com.marcskow.url.shortener.user.UserService
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -14,12 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import javax.validation.Valid
-import org.springframework.http.HttpStatus
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
-
-
-
+import javax.validation.Valid
 
 
 @RestController
@@ -45,12 +41,12 @@ class AuthenticationController(val authenticationManager: AuthenticationManager,
 
     @PostMapping("/register")
     fun registerUser(@Valid @RequestBody signUpRequest: SignUpRequest): ResponseEntity<ApiResponse> {
-        if(userRepository.existsByUsername(signUpRequest.username)) {
+        if (userRepository.existsByUsername(signUpRequest.username)) {
             return ResponseEntity(ApiResponse(false, "Username is already taken!"), HttpStatus.BAD_REQUEST)
         }
 
         val password = passwordEncoder.encode(signUpRequest.password)
-        val user = UsUser(signUpRequest.username, password, listOf(UsRole.US_ROLE_USER))
+        val user = UsUser(signUpRequest.username, signUpRequest.firstName, signUpRequest.lastName, password, listOf(UsRole.US_ROLE_USER))
 
         val result = userRepository.save(user.toUserEntity())
         val location = ServletUriComponentsBuilder

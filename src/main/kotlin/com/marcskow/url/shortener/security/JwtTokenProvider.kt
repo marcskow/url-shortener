@@ -19,10 +19,10 @@ class JwtTokenProvider {
     }
 
     @Value("\${app.jwtSecret}")
-    private val jwtSecret: String? = null
+    private lateinit var jwtSecret: String
 
     @Value("\${app.jwtExpirationInMs}")
-    private val jwtExpirationInMs: Int = 0
+    private var jwtExpirationInMs: Int = 604800000
 
     fun generateToken(authentication: Authentication): String {
 

@@ -4,15 +4,21 @@ import com.marcskow.url.shortener.security.user.details.UsUserDetails
 import org.springframework.security.core.GrantedAuthority
 
 class UsUser(val username: String,
+             val firstName: String,
+             val lastName: String,
              val password: String,
              val roles: List<UsRole>) {
 
     fun toUserDetails(): UsUserDetails {
-        return UsUserDetails(UsUser(username, password, roles))
+        return UsUserDetails(UsUser(username, firstName, lastName, password, roles))
     }
 
     fun toUserEntity(): UserEntity {
-        return UserEntity(username = username, password = password, roles = roles.map { RoleEntity(role = it.name) })
+        return UserEntity(username = username,
+                password = password,
+                firstName = firstName,
+                lastName = lastName,
+                roles = roles.map { RoleEntity(role = it.name) })
     }
 }
 

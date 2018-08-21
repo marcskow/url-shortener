@@ -14,11 +14,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
-import org.springframework.session.web.http.CookieHttpSessionStrategy
-import org.springframework.session.web.http.HttpSessionStrategy
-import org.springframework.web.cors.CorsConfiguration
-import org.springframework.web.cors.CorsConfigurationSource
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
 
 @Configuration
@@ -51,20 +46,24 @@ class WebSecurityConfiguration : WebSecurityConfigurerAdapter() {
     @Throws(Exception::class)
     override fun configure(auth: AuthenticationManagerBuilder) {
         auth.userDetailsService(userDetailsService)
+                .passwordEncoder(passwordEncoder())
     }
 
     override fun configure(http: HttpSecurity) {
+        // @formatter:off
         http
-                .cors().and()
-                .csrf().disable()
+                .cors()
+                    .and()
+                .csrf()
+                    .disable()
                 .exceptionHandling()
-                .authenticationEntryPoint(unauthorizedHandler)
-                .and()
+                    .authenticationEntryPoint(unauthorizedHandler)
+                    .and()
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                    .and()
                 .authorizeRequests()
-                .antMatchers("/", "/home", "/login", "/index.html",
+                    .antMatchers("/", "/home", "/login", "/index.html",
                         "/favicon.ico",
                         "/**/*.png",
                         "/**/*.gif",
@@ -73,30 +72,13 @@ class WebSecurityConfiguration : WebSecurityConfigurerAdapter() {
                         "/**/*.html",
                         "/**/*.css",
                         "/**/*.js")
-                .permitAll()
+                    .permitAll()
                 .antMatchers("/api/auth/**")
-                .permitAll()
+                    .permitAll()
                 .anyRequest()
-                .authenticated()
+                    .authenticated()
+        // @formatter:on
 
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter::class.java)
     }
-
-    @Bean
-    fun httpSessionStrategy(): HttpSessionStrategy {
-        return CookieHttpSessionStrategy()
-    }
-
-    @Bean
-    fun corsConfigurationSource(): CorsConfigurationSource {
-        val configuration = CorsConfiguration()
-        configuration.allowedOrigins = listOf("*")
-        configuration.allowedMethods = listOf("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH")
-        configuration.allowCredentials = true
-        configuration.allowedHeaders = listOf("Authorization", "Cache-Control", "Content-Type", "X-Requested-With")
-        val source = UrlBasedCorsConfigurationSource()
-        source.registerCorsConfiguration("/**", configuration)
-        return source
-    }
-
 }
