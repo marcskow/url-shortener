@@ -1,10 +1,10 @@
 package com.marcskow.url.shortener.security.user.details
 
-import com.marcskow.url.shortener.user.UsUser
+import com.marcskow.url.shortener.user.User
 import org.springframework.security.core.userdetails.UserDetails
 
-class UsUserDetails(private val user: UsUser) : UserDetails {
-    override fun getAuthorities() = user.roles.toMutableList()
+class UsUserDetails(private val user: User) : UserDetails {
+    override fun getAuthorities() = user.roles.map { it.role }
     override fun isEnabled() = true
     override fun getUsername() = user.username
     override fun isCredentialsNonExpired() = true
