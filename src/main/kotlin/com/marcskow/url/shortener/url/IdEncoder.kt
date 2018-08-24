@@ -14,7 +14,7 @@ class IdEncoder {
     fun encode(id: Long): String {
         var number = id
         var str = ""
-        while (id > 0) {
+        while (number > 0) {
             str += ALPHABET[(number % BASE).toInt()]
             number /= BASE
         }

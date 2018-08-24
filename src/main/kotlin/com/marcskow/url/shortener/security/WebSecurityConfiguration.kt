@@ -53,17 +53,17 @@ class WebSecurityConfiguration : WebSecurityConfigurerAdapter() {
         // @formatter:off
         http
                 .cors()
-                    .and()
+                .and()
                 .csrf()
-                    .disable()
+                .disable()
                 .exceptionHandling()
-                    .authenticationEntryPoint(unauthorizedHandler)
-                    .and()
+                .authenticationEntryPoint(unauthorizedHandler)
+                .and()
                 .sessionManagement()
-                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                    .and()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
                 .authorizeRequests()
-                    .antMatchers("/", "/home", "/login", "/index.html",
+                .antMatchers("/", "/home", "/login", "/index.html",
                         "/favicon.ico",
                         "/**/*.png",
                         "/**/*.gif",
@@ -72,11 +72,11 @@ class WebSecurityConfiguration : WebSecurityConfigurerAdapter() {
                         "/**/*.html",
                         "/**/*.css",
                         "/**/*.js")
-                    .permitAll()
-                .antMatchers("/api/auth/**")
-                    .permitAll()
+                .permitAll()
+                .antMatchers("/u/*", "/api/auth/**")
+                .permitAll()
                 .anyRequest()
-                    .authenticated()
+                .authenticated()
         // @formatter:on
 
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter::class.java)

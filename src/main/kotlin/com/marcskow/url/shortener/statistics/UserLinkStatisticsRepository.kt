@@ -7,7 +7,9 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface UserLinkStatisticsRepository : CrudRepository<UserLinkStatistics, Long> {
-    @Query("SELECT s FROM UserLinkStatistics s WHERE v.user.username = :userName AND v.shortenedUrl = :shortenedUrl")
-    fun findByUsernameAndShortenedLink(@Param("userName") userName: String,
-                                       @Param("shortenedUrl") shortenedUrl: String): UserLinkStatistics?
+    fun findByShortenedUrl(shortenedUrl: String): UserLinkStatistics?
+
+    @Query("SELECT s FROM UserLinkStatistics s WHERE s.user.username = :userName AND s.shortenedUrl = :shortenedUrl")
+    fun findByUsernameAndShortenedUrl(@Param("userName") userName: String,
+                                      @Param("shortenedUrl") shortenedUrl: String): UserLinkStatistics?
 }

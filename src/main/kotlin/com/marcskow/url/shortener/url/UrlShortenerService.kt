@@ -17,16 +17,16 @@ class UrlShortenerService(private val urlRepository: UrlRepository,
 
         val url = urlRepository.save(Url(url = originalUrl))
         val shortend = idEncoder.encode(url.id)
-        val statistics = UserLinkStatistics(originalLink = originalUrl, shortenedLink = shortend, user = user)
+        val statistics = UserLinkStatistics(originalUrl = originalUrl, shortenedUrl = shortend, user = user)
         userLinkStatisticsRepository.save(statistics)
 
         return idEncoder.encode(url.id)
     }
 
-    fun fetchOriginalUrl(user: User, shortenedUrl: String): String {
+    fun fetchOriginalUrl(shortenedUrl: String): String {
         val id = idEncoder.decode(shortenedUrl)
         val url = urlRepository.findById(id).map { it.url }.orElse("")
-        url?.let { userLinkStatisticsRepository.findByUsernameAndShortenedLink(user.username, shortenedUrl)?.visits?.inc() }
+        url?.let { userLinkStatisticsRepository.findByShortenedUrl(shortenedUrl)?.visits?.inc() }
         return url
     }
 }

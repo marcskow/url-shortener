@@ -1,8 +1,9 @@
 package com.marcskow.url.shortener.security.authentication
 
 import com.marcskow.url.shortener.security.JwtTokenProvider
-import com.marcskow.url.shortener.user.UsRole
-import com.marcskow.url.shortener.user.UsUser
+import com.marcskow.url.shortener.user.Role
+import com.marcskow.url.shortener.user.RoleValue
+import com.marcskow.url.shortener.user.User
 import com.marcskow.url.shortener.user.UserRepository
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -46,9 +47,14 @@ class AuthenticationController(val authenticationManager: AuthenticationManager,
         }
 
         val password = passwordEncoder.encode(signUpRequest.password)
-        val user = UsUser(signUpRequest.username, signUpRequest.firstName, signUpRequest.lastName, password, listOf(UsRole.US_ROLE_USER))
+        val user = User(
+                username = signUpRequest.username,
+                firstName = signUpRequest.firstName,
+                lastName = signUpRequest.lastName,
+                password = password,
+                roles = listOf(Role(role = RoleValue.USER)))
 
-        val result = userRepository.save(user.toUserEntity())
+        val result = userRepository.save(user)
         val location = ServletUriComponentsBuilder
                 .fromCurrentContextPath()
                 .path("/api/users/{username}")
