@@ -1,6 +1,5 @@
 package com.marcskow.url.shortener.user
 
-import com.marcskow.url.shortener.statistics.Statistics
 import org.jetbrains.annotations.NotNull
 import org.springframework.security.core.GrantedAuthority
 import javax.persistence.*
@@ -15,10 +14,8 @@ data class User(@Id @GeneratedValue(strategy = GenerationType.IDENTITY) val id: 
                 @NotNull val lastName: String,
                 @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
                 @JoinColumn(name = "user_id")
-                val roles: List<Role> = listOf(Role(role = RoleValue.USER)),
-                @OneToOne(fetch = FetchType.LAZY)
-                @JoinColumn(name = "statistics_id")
-                val statistics: Statistics)
+                val roles: List<Role> = listOf(Role(role = RoleValue.USER))
+)
 
 @Entity
 @Table(name = "roles")
