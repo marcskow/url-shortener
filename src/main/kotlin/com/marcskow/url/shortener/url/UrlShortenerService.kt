@@ -1,7 +1,7 @@
 package com.marcskow.url.shortener.url
 
-import com.marcskow.url.shortener.statistics.UserLinkStatistics
-import com.marcskow.url.shortener.statistics.UserLinkStatisticsRepository
+import com.marcskow.url.shortener.statistics.user.UserLinkStatistics
+import com.marcskow.url.shortener.statistics.user.UserLinkStatisticsRepository
 import com.marcskow.url.shortener.user.User
 import org.springframework.stereotype.Service
 

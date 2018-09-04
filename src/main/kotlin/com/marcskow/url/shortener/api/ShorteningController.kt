@@ -15,14 +15,11 @@ import java.net.InetAddress
 class ShorteningController(private val userRepository: UserRepository,
                            private val urlShortenerService: UrlShortenerService) {
 
-    data class ShortenUrlRequest(val url: String)
-
     @PostMapping
-    fun shortenUrl(authentication: Authentication, @RequestBody shortenUrlRequest: ShortenUrlRequest): String {
+    fun shortenUrl(authentication: Authentication, @RequestBody originalUrl: String): String {
         val user = userRepository.findByUsername(authentication.name)
                 ?: throw UsernameNotFoundException("User with given username not found")
-        val url = shortenUrlRequest.url
-        val httpUrl = if (url.startsWith("http", true)) url else "http://$url"
+        val httpUrl = if (originalUrl.startsWith("http", true)) originalUrl else "http://$originalUrl"
         return "http://${InetAddress.getLocalHost().hostAddress}:8080/u/${urlShortenerService.computeShortenedUrl(user, httpUrl)}"
     }
 }

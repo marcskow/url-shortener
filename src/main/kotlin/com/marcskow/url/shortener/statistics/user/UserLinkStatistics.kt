@@ -1,4 +1,4 @@
-package com.marcskow.url.shortener.statistics
+package com.marcskow.url.shortener.statistics.user
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.marcskow.url.shortener.user.User
